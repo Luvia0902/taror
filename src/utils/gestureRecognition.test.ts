@@ -22,7 +22,9 @@ function createLandmarks(overrides: Partial<Record<number, Point>> = {}): Landma
 
     // Apply overrides
     for (const [index, point] of Object.entries(overrides)) {
-        defaultLandmarks[Number(index)] = point;
+        if (point) {
+            defaultLandmarks[Number(index)] = point;
+        }
     }
 
     return defaultLandmarks;

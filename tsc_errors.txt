@@ -1,0 +1,5 @@
+﻿src/utils/gestureRecognition.test.ts(25,9): error TS2322: Type 'Point | undefined' is not assignable to type 'Point'.
+  Type 'undefined' is not assignable to type 'Point'.
+vite.config.ts(9,3): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'test' does not exist in type 'UserConfigExport'.
