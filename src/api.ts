@@ -52,8 +52,12 @@ const SYSTEM_PROMPT = `你是一位專業的塔羅大師，擅長用溫柔且有
 function getGeminiClient(): GoogleGenerativeAI {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-    if (!apiKey || apiKey === 'your_api_key_here') {
-        throw new Error('請設定 VITE_GEMINI_API_KEY 環境變數。請參考 .env.example 檔案。');
+    if (!apiKey) {
+        throw new Error('VITE_GEMINI_API_KEY 未定義或找不到。請確認 GitHub Secrets 或 .env 設定。');
+    }
+
+    if (apiKey === 'your_api_key_here' || apiKey.trim() === '') {
+        throw new Error('VITE_GEMINI_API_KEY 為空白或預設佔位符。請填入有效的 API 金鑰。');
     }
 
     return new GoogleGenerativeAI(apiKey);

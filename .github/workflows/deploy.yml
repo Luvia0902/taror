@@ -31,6 +31,11 @@ jobs:
       - name: Install and Build 🔧
         run: |
           npm install
+          if [ -z "$VITE_GEMINI_API_KEY" ]; then
+            echo "::error::VITE_GEMINI_API_KEY is EMPTY in the build environment!"
+            exit 1
+          fi
+          echo "VITE_GEMINI_API_KEY is present (length: ${#VITE_GEMINI_API_KEY})"
           npm run build
         env:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
