@@ -1,0 +1,107 @@
+/* CardCarousel Horizontal Layout */
+
+.card-carousel-horizontal {
+    position: relative;
+    width: 100%;
+    padding: 10px 0 20px;
+}
+
+.card-scroll-container {
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 30px 20px 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 215, 0, 0.3) transparent;
+}
+
+.card-scroll-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.card-scroll-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.card-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.3);
+    border-radius: 3px;
+}
+
+.card-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    min-width: min-content;
+    padding: 0 10px;
+}
+
+.card-slot {
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card-slot.hovered {
+    transform: translateY(-24px);
+    z-index: 10;
+}
+
+/* Selection count badge */
+.selection-count {
+    text-align: center;
+    padding: 8px 16px;
+    margin-bottom: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.selection-count .count {
+    font-weight: 700;
+    color: #ffd700;
+    margin: 0 4px;
+}
+
+/* Hover hint */
+.hover-hint {
+    text-align: center;
+    padding: 12px 20px;
+    margin-top: 8px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 12px;
+    margin-left: 20px;
+    margin-right: 20px;
+    animation: hint-pulse 1.5s ease-in-out infinite;
+}
+
+.hint-action {
+    color: #ffd700;
+    font-weight: 600;
+}
+
+@keyframes hint-pulse {
+
+    0%,
+    100% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-row {
+        justify-content: flex-start;
+    }
+
+    .card-scroll-container {
+        padding: 30px 10px 15px;
+    }
+}

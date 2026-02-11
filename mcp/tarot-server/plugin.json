@@ -1,0 +1,16 @@
+{
+    "id": "tarot-expert",
+    "name": "Tarot Expert Skill",
+    "version": "1.0.0",
+    "description": "提供專業級塔羅占卜分析、抽牌與牌義查詢功能",
+    "entryPoint": "index.js",
+    "capabilities": {
+        "tools": [
+            "draw_cards",
+            "analyze_spread",
+            "get_card_info"
+        ]
+    },
+    "author": "Antigravity",
+    "homepage": "https://github.com/example/tarot-mcp"
+}

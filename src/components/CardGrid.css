@@ -1,0 +1,55 @@
+/* CardGrid Styles */
+
+.card-grid-container {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.selection-info {
+    text-align: center;
+    padding: 10px;
+    background: var(--glass-bg);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    margin-bottom: 10px;
+}
+
+.selection-info .count {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-gold);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.card-grid-item {
+    transition: transform 0.3s ease;
+}
+
+/* Hover hint for grid */
+.grid-hover-hint {
+    text-align: center;
+    padding: 10px 20px;
+    color: var(--color-gold);
+    font-weight: 600;
+    min-height: 40px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+    }
+}

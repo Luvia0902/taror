@@ -1,0 +1,201 @@
+/* TarotCard Styles */
+
+.tarot-card {
+  position: relative;
+  width: 120px;
+  height: 186px;
+  perspective: 1000px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+  border-radius: 12px;
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    0 5px 15px rgba(0, 0, 0, 0.3);
+  /* Default to face-down */
+  transform: rotateY(180deg);
+}
+
+.tarot-card.face-up .card-inner {
+  transform: rotateY(0deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.card-front {
+  background: linear-gradient(135deg, #0d0b2e 0%, #1a1645 100%);
+  border: 2px solid var(--color-gold);
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 15px rgba(252, 194, 0, 0.2);
+  /* Front is at 0deg */
+  transform: rotateY(0deg);
+  position: relative;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #1a1645 0%, #050410 100%);
+  border: 2px solid var(--color-purple);
+  box-shadow: inset 0 0 20px rgba(157, 80, 187, 0.2);
+  /* Back is rotated 180deg relative to front */
+  transform: rotateY(180deg);
+}
+
+.card-back-pattern {
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(circle at center, var(--color-gold-glow) 0%, transparent 60%),
+    url("/assets/cards/card-back.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.card-image-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  position: relative;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  filter: brightness(0.9) contrast(1.1);
+}
+
+/* Info only visible when face-up */
+.card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 70%, transparent 100%);
+  text-align: center;
+  backdrop-filter: blur(2px);
+}
+
+.card-name {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-gold);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  font-family: var(--font-serif);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.card-reversed-badge {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 10px;
+  padding: 2px 8px;
+  background: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Selected state - maintains flip state if face-up, otherwise just scales */
+.tarot-card.selected.face-up .card-inner {
+  transform: rotateY(0deg) scale(1.05);
+}
+
+.tarot-card.selected:not(.face-up) .card-inner {
+  transform: rotateY(180deg) scale(1.05);
+  box-shadow:
+    0 0 30px var(--color-purple),
+    0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.tarot-card.selected .card-inner {
+  border: 2px solid var(--color-gold);
+}
+
+.selection-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 20px;
+  background: linear-gradient(45deg,
+      rgba(255, 215, 0, 0.3),
+      rgba(157, 80, 187, 0.3),
+      rgba(255, 215, 0, 0.3));
+  background-size: 200% 200%;
+  animation: glow-pulse 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.6;
+  }
+
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+}
+
+/* Hover effects */
+.tarot-card:hover .card-inner {
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.5),
+    0 10px 25px rgba(157, 80, 187, 0.2);
+}
+
+/* Hand hover state (gesture tracking) */
+.tarot-card.hand-hovered .card-inner {
+  transform: rotateY(180deg) translateY(-15px) scale(1.03);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 25px var(--color-gold-glow);
+}
+
+.tarot-card.hand-hovered.face-up .card-inner {
+  transform: rotateY(0deg) translateY(-15px) scale(1.03);
+}
+
+/* Loading placeholder */
+.card-image-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
