@@ -95,7 +95,7 @@ function parseResponse(text: string): TarotAnalysis {
     } catch (error) {
         console.error('Failed to parse Gemini response:', error);
         console.error('Raw response text:', text); // Log the raw text for debugging
-        throw new Error('AI 回應格式解析失敗，請重試。');
+        throw new Error(`AI 回應格式解析失敗: ${text.substring(0, 20)}... 請重試。`);
     }
 }
 
@@ -121,11 +121,11 @@ export async function analyzeTarot(
     try {
         const genAI = getGeminiClient();
         const model = genAI.getGenerativeModel({
-            model: 'gemini-flash-latest',
+            model: 'gemini-1.5-flash',
             generationConfig: {
                 temperature: 0.7,
                 topP: 0.9,
-                maxOutputTokens: 1024,
+                maxOutputTokens: 2048,
                 responseMimeType: 'application/json',
             },
         });
@@ -140,7 +140,7 @@ ${userQuestion}
 抽到的塔羅牌：
 ${cardsText}
 
-請根據以上資訊進行解牌，並以 JSON 格式回覆。`;
+請根據以上資訊進行解牌，並以 JSON 格式回覆。確保回覆是有效的 JSON 字串，不要包含 Markdown 標記。`;
 
         const result = await model.generateContent(prompt);
         const response = await result.response;
@@ -163,6 +163,11 @@ ${cardsText}
 
             if (error.message.includes('QUOTA')) {
                 throw new Error('API 使用量已達上限，請稍後再試。');
+            }
+
+            // Handle JSON parsing errors specifically
+            if (error.message.includes('AI 回應格式解析失敗')) {
+                throw error;
             }
 
             console.error('Gemini API error:', error);
