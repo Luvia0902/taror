@@ -121,7 +121,7 @@ export async function analyzeTarot(
     try {
         const genAI = getGeminiClient();
         const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-pro',
             generationConfig: {
                 temperature: 0.7,
                 topP: 0.9,
