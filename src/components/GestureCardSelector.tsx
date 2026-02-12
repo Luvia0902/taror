@@ -9,7 +9,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCamera } from '../hooks/useCamera';
 import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 import { detectGesture, GestureStateManager, SwipeTracker, getPalmCenter, type LandmarkList, type Gesture } from '../utils/gestureRecognition';
-import { CardGrid } from './CardGrid';
+import { CardFan } from './CardFan';
 import type { TarotCardData } from './TarotCard';
 import './GestureCardSelector.css';
 
@@ -129,19 +129,18 @@ export function GestureCardSelector({
                                 const landmarks = results.landmarks[0] as LandmarkList;
                                 setIsDetected(true);
 
-                                // Map palm position to grid coordinates (2D)
+                                // Map palm position to linear horizontal layout for Fan
+                                // The fan is primarily horizontal, so we care most about X
                                 const palmCenter = getPalmCenter(landmarks);
-                                const mirroredX = 1 - palmCenter.x;
-                                const y = palmCenter.y; // Y is usually 0 at top, 1 at bottom
+                                const mirroredX = 1 - palmCenter.x; // Mirror for intuitive interaction
 
-                                // Assuming a fixed column count for simplicity or estimating based on maxSelections/length
-                                // For the grid, we'll try to calculate based on 4-5 columns as per common desktop view
-                                const cols = 4;
-                                const rows = Math.ceil(cards.length / cols);
+                                // Map X (0-1) to card index
+                                // We add some padding on sides to make selecting edge cards easier
+                                const padding = 0.1;
+                                const effectiveWidth = 1 - 2 * padding;
+                                const adjustedX = Math.max(0, Math.min(1, (mirroredX - padding) / effectiveWidth));
 
-                                const colIndex = Math.min(Math.floor(mirroredX * cols), cols - 1);
-                                const rowIndex = Math.min(Math.floor(y * rows), rows - 1);
-                                const cardIndex = rowIndex * cols + colIndex;
+                                const cardIndex = Math.floor(adjustedX * cards.length);
 
                                 if (cardIndex >= 0 && cardIndex < cards.length) {
                                     setHoveredIndex(cardIndex);
@@ -295,8 +294,8 @@ export function GestureCardSelector({
                     )}
                 </div>
 
-                {/* Card Grid layout (All at once) */}
-                <CardGrid
+                {/* Card Fan Layout */}
+                <CardFan
                     cards={cards}
                     selectedCardIds={selectedCardIds}
                     hoveredIndex={hoveredIndex}
