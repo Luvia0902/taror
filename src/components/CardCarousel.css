@@ -95,7 +95,7 @@
     }
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 768px) {
     .card-row {
         justify-content: flex-start;
@@ -103,5 +103,24 @@
 
     .card-scroll-container {
         padding: 30px 10px 15px;
+    }
+}
+
+/* Responsive - Desktop */
+@media (min-width: 1024px) {
+    .card-scroll-container {
+        padding: 40px 30px 25px;
+    }
+
+    .card-row {
+        gap: 18px;
+    }
+
+    .selection-count {
+        font-size: 16px;
+    }
+
+    .hover-hint {
+        font-size: 18px;
     }
 }

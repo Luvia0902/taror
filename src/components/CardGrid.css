@@ -46,10 +46,23 @@
     min-height: 40px;
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 600px) {
     .card-grid {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 12px;
+    }
+}
+
+/* Responsive - Desktop */
+@media (min-width: 1024px) {
+    .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 28px;
+        max-width: 1200px;
+    }
+
+    .selection-info {
+        font-size: 16px;
     }
 }

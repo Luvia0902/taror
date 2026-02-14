@@ -238,7 +238,7 @@
     color: white;
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 768px) {
     .video-container {
         max-width: 100%;
@@ -259,5 +259,37 @@
     .complete-button,
     .reset-button {
         width: 100%;
+    }
+}
+
+/* Responsive - Desktop */
+@media (min-width: 1024px) {
+    .gesture-card-selector {
+        min-height: auto;
+    }
+
+    .selector-content {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 40px;
+        padding: 30px 40px;
+        flex-wrap: wrap;
+    }
+
+    .video-container {
+        max-width: 480px;
+        min-width: 400px;
+        flex-shrink: 0;
+    }
+
+    .instructions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .action-buttons {
+        width: 100%;
+        justify-content: center;
     }
 }

@@ -302,7 +302,7 @@ body::before {
   font-size: 14px;
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 768px) {
   .app-header h1 {
     font-size: 28px;
@@ -314,5 +314,76 @@ body::before {
 
   .question-step h2 {
     font-size: 20px;
+  }
+}
+
+/* Responsive - Desktop */
+@media (min-width: 1024px) {
+  .app-header {
+    padding: 50px 40px 24px;
+  }
+
+  .app-header h1 {
+    font-size: 52px;
+    letter-spacing: 5px;
+  }
+
+  .tagline {
+    font-size: 18px;
+  }
+
+  .app-main {
+    padding: 30px 40px;
+  }
+
+  .step-container {
+    max-width: 1200px;
+  }
+
+  .question-step {
+    padding: 80px 40px;
+  }
+
+  .question-step h2 {
+    font-size: 30px;
+  }
+
+  .question-form {
+    max-width: 650px;
+  }
+
+  .question-input {
+    padding: 24px;
+    font-size: 18px;
+    border-radius: 20px;
+  }
+
+  .submit-button {
+    padding: 18px 50px;
+    font-size: 20px;
+  }
+
+  .question-display {
+    padding: 20px 30px;
+  }
+
+  .question-text {
+    font-size: 18px;
+  }
+
+  .loading-step {
+    min-height: 500px;
+  }
+
+  .crystal-ball {
+    font-size: 100px;
+  }
+
+  .loading-step h2 {
+    font-size: 28px;
+  }
+
+  .loading-bar {
+    width: 300px;
   }
 }

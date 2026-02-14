@@ -106,6 +106,73 @@ function parseResponse(text: string): TarotAnalysis {
  * @param selectedCards - Array of selected tarot cards with their positions
  * @returns TarotAnalysis containing summary, interpretations, and advice
  */
+/** Available models in fallback order */
+const MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash'] as const;
+
+/** Retry delay helper with exponential backoff */
+function delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Try generating content with retry and model fallback
+ */
+async function generateWithRetry(
+    genAI: GoogleGenerativeAI,
+    prompt: string,
+    maxRetries = 3,
+): Promise<string> {
+    for (const modelName of MODELS) {
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                console.log(`嘗試模型 ${modelName}（第 ${attempt + 1} 次）...`);
+                const model = genAI.getGenerativeModel({
+                    model: modelName,
+                    generationConfig: {
+                        temperature: 0.7,
+                        topP: 0.9,
+                        maxOutputTokens: 2048,
+                        responseMimeType: 'application/json',
+                    },
+                });
+
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                return response.text();
+            } catch (err) {
+                const isRetryable = err instanceof Error &&
+                    (err.message.includes('429') || err.message.includes('Resource exhausted') || err.message.includes('QUOTA') ||
+                        err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('network'));
+
+                if (isRetryable && attempt < maxRetries - 1) {
+                    const waitMs = Math.min(2000 * Math.pow(2, attempt), 10000);
+                    console.warn(`請求失敗（${err instanceof Error ? err.message.substring(0, 50) : '未知'}），等待 ${waitMs}ms 後重試...`);
+                    await delay(waitMs);
+                    continue;
+                }
+
+                // If last attempt for this model, try next model
+                if (isRetryable) {
+                    console.warn(`模型 ${modelName} 已重試 ${maxRetries} 次仍失敗，嘗試備用模型...`);
+                    break;
+                }
+
+                // Non-retryable error, throw immediately
+                throw err;
+            }
+        }
+    }
+
+    throw new Error('所有模型皆無法使用（額度耗盡），請稍後再試或更換 API 金鑰。');
+}
+
+/**
+ * Analyze tarot cards using Gemini AI
+ * 
+ * @param userQuestion - The question the user wants to ask
+ * @param selectedCards - Array of selected tarot cards with their positions
+ * @returns TarotAnalysis containing summary, interpretations, and advice
+ */
 export async function analyzeTarot(
     userQuestion: string,
     selectedCards: TarotCard[]
@@ -120,16 +187,6 @@ export async function analyzeTarot(
 
     try {
         const genAI = getGeminiClient();
-        const model = genAI.getGenerativeModel({
-            model: 'gemini-pro',
-            generationConfig: {
-                temperature: 0.7,
-                topP: 0.9,
-                maxOutputTokens: 2048,
-                responseMimeType: 'application/json',
-            },
-        });
-
         const cardsText = formatCardsForPrompt(selectedCards);
 
         const prompt = `${SYSTEM_PROMPT}
@@ -142,27 +199,21 @@ ${cardsText}
 
 請根據以上資訊進行解牌，並以 JSON 格式回覆。確保回覆是有效的 JSON 字串，不要包含 Markdown 標記。`;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-
+        const text = await generateWithRetry(genAI, prompt);
         return parseResponse(text);
     } catch (error) {
         if (error instanceof Error) {
             // Re-throw known errors
             if (error.message.includes('VITE_GEMINI_API_KEY') ||
                 error.message.includes('請至少選擇') ||
-                error.message.includes('請輸入')) {
+                error.message.includes('請輸入') ||
+                error.message.includes('所有模型皆無法使用')) {
                 throw error;
             }
 
             // Handle API errors
             if (error.message.includes('API_KEY_INVALID')) {
                 throw new Error('API 金鑰無效，請檢查您的 Gemini API 金鑰設定。');
-            }
-
-            if (error.message.includes('QUOTA')) {
-                throw new Error('API 使用量已達上限，請稍後再試。');
             }
 
             // Handle JSON parsing errors specifically

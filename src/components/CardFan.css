@@ -55,3 +55,16 @@
 .card-fan-item:hover {
     z-index: 100 !important;
 }
+
+/* Desktop - larger fan area */
+@media (min-width: 1024px) {
+    .card-fan-container {
+        height: 500px;
+        flex: 1;
+        min-width: 400px;
+    }
+
+    .card-fan-wrapper {
+        max-width: 100%;
+    }
+}

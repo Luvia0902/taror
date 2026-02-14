@@ -169,7 +169,7 @@
     box-shadow: 0 10px 40px rgba(252, 194, 0, 0.5);
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 768px) {
     .tarot-reading {
         padding: 20px;
@@ -181,5 +181,44 @@
 
     .reading-section {
         padding: 24px;
+    }
+}
+
+/* Responsive - Desktop */
+@media (min-width: 1024px) {
+    .tarot-reading {
+        max-width: 1100px;
+        padding: 50px 40px;
+    }
+
+    .reading-header h2 {
+        font-size: 38px;
+    }
+
+    .reading-section {
+        padding: 40px;
+    }
+
+    .reading-section p {
+        font-size: 18px;
+    }
+
+    .card-name {
+        font-size: 22px;
+    }
+
+    .interp-text {
+        font-size: 17px;
+    }
+
+    .revealed-cards-container {
+        gap: 40px;
+        margin-bottom: 50px;
+    }
+
+    .new-reading-button {
+        max-width: 360px;
+        padding: 20px 40px;
+        font-size: 20px;
     }
 }
